@@ -1,16 +1,19 @@
 package com.example.appventas.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appventas.R;
+import com.example.appventas.activities.ProductoActivity;
 import com.example.appventas.model.Categoria;
 
 import java.io.IOException;
@@ -37,7 +40,7 @@ public class CategoriaAdapter  extends RecyclerView.Adapter<CategoriaAdapter.Cat
     @Override
     public void onBindViewHolder(@NonNull CategoriaViewHolder holder, int position) {
         Categoria categoria = categorias.get(position);
-        holder.nombreTextView.setText(categoria.getNombre());
+        holder.nombreButton.setText(categoria.getNombre());
 
         // Cargar la imagen desde assets
         try {
@@ -47,6 +50,12 @@ public class CategoriaAdapter  extends RecyclerView.Adapter<CategoriaAdapter.Cat
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        holder.nombreButton.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), ProductoActivity.class);
+            intent.putExtra("categoriaId", categoria.getId()); // Pasamos el ID de la categoría
+            v.getContext().startActivity(intent);
+        });
     }
 
     @Override
@@ -55,12 +64,12 @@ public class CategoriaAdapter  extends RecyclerView.Adapter<CategoriaAdapter.Cat
     }
 
     static class CategoriaViewHolder extends RecyclerView.ViewHolder {
-        TextView nombreTextView;
+        Button nombreButton;
         ImageView imageView;
 
         public CategoriaViewHolder(@NonNull View itemView) {
             super(itemView);
-            nombreTextView = itemView.findViewById(R.id.nombreTextView);
+            nombreButton = itemView.findViewById(R.id.nombreButton);
             imageView = itemView.findViewById(R.id.imageView);
         }
     }
